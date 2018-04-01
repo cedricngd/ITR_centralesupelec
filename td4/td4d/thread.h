@@ -1,11 +1,11 @@
 #include <pthread.h>
 #include<iostream>
-
 class Thread {
 private: 
 	pthread_t posixId;
 	pthread_attr_t posixAttr;
 	int schedPolicy;
+	
 	static void* call_run(void* aThread);
 public:
 	Thread(int schedPolicy= SCHED_OTHER);
