@@ -23,7 +23,7 @@ int main(int argc, char* argv []){
 	
 	for(int i=0;i<nTasks;i++){
 	
-		while( not tvector[i]->join(2000) )
+		while( not tvector[i]->join(2500) )
 		{
 			cout << "join "<<endl;
 		}
