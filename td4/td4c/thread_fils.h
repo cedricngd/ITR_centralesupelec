@@ -1,4 +1,5 @@
 #include "thread.h"
+#include "condition.h"
 #include "mutex.h"
 
 class Thread_fils: public Thread{
@@ -6,9 +7,9 @@ class Thread_fils: public Thread{
 	int* pCounter;
 	int nLoops;	
 	Mutex* m_pmutex;
-	
+	Condition* m_pcondition;
 	public:
-	Thread_fils(int* pCounter, int nLoops, Mutex* m_pmutex);
+	Thread_fils(int* pCounter, int nLoops, Mutex* m_pmutex,Condition* pcondition);
 
 	protected:
 	void run();

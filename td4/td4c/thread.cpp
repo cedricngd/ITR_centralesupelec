@@ -8,6 +8,7 @@ Thread::Thread(int schedPolicy){
 
 
 void Thread::start(int priority){
+	started = true;
 	pthread_create (&posixId, NULL,call_run, this);
 	setSchedPolicy(schedPolicy, priority);
 }
@@ -33,6 +34,7 @@ void Thread::setSchedPolicy(int schedPolicy,int priority){
 
 void Thread::join(){
 	pthread_join(posixId, NULL);
+	started= false;
 }
 
 bool Thread::join(double delay_ms){
@@ -53,9 +55,10 @@ bool Thread::join(double delay_ms){
 	}
 	
 
-	return pthread_timedjoin_np(posixId, NULL, &deadline) != ETIMEDOUT;	//	pthread_timedjoin_np prend un temps absolu, 
+	bool ret=pthread_timedjoin_np(posixId, NULL, &deadline) != ETIMEDOUT;	//	pthread_timedjoin_np prend un temps absolu, 
 																		//	retourne  ETIMEDOUT si time out arrive avant la fin du thread
-
+	started= false;
+	return ret;
 }
 
 
