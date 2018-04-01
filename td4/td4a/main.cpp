@@ -7,15 +7,16 @@ using namespace std;
 int main(int argc, char* argv []){
 	int counter=0;
 	int nLoops = 1000000;
-	int nTasks=1;			//TODO dynamic
+	int nTasks=2;			//TODO dynamic
 	vector<Thread_fils*> tvector;	
 
 	for(int i=0;i<nTasks;i++){
+
 		tvector.push_back(new Thread_fils(&counter, nLoops));
 	}
 	
 	for(int i=0;i<nTasks;i++){
-		tvector[i]->start(0);
+		tvector[i]->start(99);
 
 	}
 
@@ -23,13 +24,15 @@ int main(int argc, char* argv []){
 	
 	for(int i=0;i<nTasks;i++){
 	
-		while( not tvector[i]->join(2500) )
+		while( not tvector[i]->join(1500) )
 		{
-			cout << "join "<<endl;
+			cout << "timeout reached "<< i<<endl; // test the join
 		}
 	}
+
 	cout << counter <<endl;
-	for(int i=0;i<nTasks;i++){
+/*
+	for(int i=0;i<nTasks;i++){ // cree parfois des erreurs de seg...
 		delete tvector[i];
-	}
+	}*/ 
 }

@@ -10,7 +10,7 @@ private:
 public:
 	Thread(int schedPolicy= SCHED_OTHER);
 	//Thread(pthread_t, int schedPolicy, int priority);
-	void setSchedPolicy(int schedPolicy);
+	void setSchedPolicy(int schedPolicy, int priority);
 	void start(int priority);
 	void join();
 	bool join (double timeout_ms);

@@ -1,5 +1,6 @@
 #include "thread.h"
 #include<iostream>
+
 using namespace std;
 
 Thread::Thread(int schedPolicy){
@@ -8,13 +9,48 @@ Thread::Thread(int schedPolicy){
 
 
 void Thread::start(int priority){
-	pthread_attr_t attr;
-	pthread_attr_init(&attr);
-	pthread_attr_setschedpolicy(&attr,schedPolicy);
-	pthread_create (&posixId, NULL,call_run, this); // this : le thread actuel
-
-
+	pthread_create (&posixId, NULL,call_run, this);
+	setSchedPolicy(schedPolicy, priority);
 }
+void Thread::setSchedPolicy(int schedPolicy,int priority){
+     int ret;
+	pthread_t this_thread = pthread_self();
+
+	// struct sched_param is used to store the scheduling priority
+     struct sched_param params;
+
+	// We'll set the priority
+     params.sched_priority = priority;
+ 
+     // Attempt to set thread real-time priority to the <schedPolicy> policy
+     ret = pthread_setschedparam(this_thread, schedPolicy, &params);
+     if (ret != 0) {
+         cout << "Unsuccessful in setting thread realtime prio, error: "<< ret << endl;
+         return;     
+     }
+
+
+	// Now verify the change in thread priority
+     int policy = 0;
+     ret = pthread_getschedparam(this_thread, &policy, &params);
+     if (ret != 0) {
+         cout << "Couldn't retrieve real-time scheduling paramers" << endl;
+         return;
+     }
+
+     // Check the correct policy was applied
+     if(policy != schedPolicy) {
+         cout << "Scheduling is NOT "<< schedPolicy<< " but: " << policy<< endl;
+     } else {
+         cout << " OK, schedPolicy= "<< policy << endl;
+     }
+
+     // Print thread scheduling priority
+     cout << "Thread priority is " << params.sched_priority << endl; 
+	
+}
+
+
 
 void Thread::join(){
 	pthread_join(posixId, NULL);
@@ -38,8 +74,8 @@ bool Thread::join(double delay_ms){
 	}
 	
 
-	return pthread_timedjoin_np(posixId, NULL, &deadline) != ETIMEDOUT;	//	prend un temps absolu, 
-																	//	retourne  ETIMEDOUT si time out arrive avant la fin du thread
+	return pthread_timedjoin_np(posixId, NULL, &deadline) != ETIMEDOUT;	//	pthread_timedjoin_np prend un temps absolu, 
+																		//	retourne  ETIMEDOUT si time out arrive avant la fin du thread
 
 }
 
