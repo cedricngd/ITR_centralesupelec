@@ -1,0 +1,16 @@
+
+ifconfig
+
+carte PC 2 192.168.50.1
+ip Zedboard: 192.168.50.10
+
+ssh root@192.168.50.10
+scp fichier root@192.168.50.10
+
+tar xzf ITR.tgz
+export PATH=$Home/ITR/Zed/cross/bin:$PATH
+
+pour compiler: arm-linux-g++
+
+restart network: 
+sudo service network-manager restart
