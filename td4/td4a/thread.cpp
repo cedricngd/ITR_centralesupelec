@@ -24,10 +24,9 @@ bool Thread::join(double delay_ms){
 	struct timespec delay_ts,deadline;
 
 	delay_ts.tv_sec= delay_ms/1000;
-	cout << delay_ts.tv_sec<<endl;
 	delay_ts.tv_nsec= (delay_ms - delay_ts.tv_sec*1000)*1000000;
-	cout << delay_ts.tv_nsec <<endl;
 
+ 	
 	if (clock_gettime(CLOCK_REALTIME,&deadline)==-1){
 		cerr<< "Error in getClockTime"<<endl;
 	}	
